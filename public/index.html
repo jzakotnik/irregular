@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Verb Drop – Irregular Verbs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main id="app">
+
+  <!-- Startseite -->
+  <section id="home" class="screen scroll on" aria-label="Start">
+    <header class="hero">
+      <h1 class="display">Verb Drop</h1>
+      <p class="sub">Sortiere die Verben nach ihrem Muster, bevor sie unten landen.</p>
+      <div class="trio" id="trio" aria-hidden="true"></div>
+    </header>
+    <div class="levels">
+      <button class="lvl mode" id="modeSolo">
+        <span class="lvl-num">1</span>
+        <span class="lvl-main"><span class="lvl-name">Einzelspiel</span><span class="lvl-sub">Level für Level allein üben</span></span>
+      </button>
+      <button class="lvl mode" id="modeVs">
+        <span class="lvl-num vs">VS</span>
+        <span class="lvl-main"><span class="lvl-name">1 gegen 1</span><span class="lvl-sub">Live gegen einen Freund. Wer zuerst alle Leben verliert, verliert.</span></span>
+      </button>
+    </div>
+    <div class="foot">
+      <button class="btn ghost sm" id="btnCheat">Spickzettel</button>
+      <button class="btn ghost sm" id="btnSound"></button>
+      <button class="btn ghost sm" id="btnSpeak"></button>
+    </div>
+  </section>
+
+  <!-- Einzelspiel: Level-Auswahl -->
+  <section id="menu" class="screen scroll" aria-label="Level">
+    <div class="top">
+      <button class="icon" id="menuBack" aria-label="Zurück zur Startseite">&lsaquo;</button>
+      <h2 class="display">Einzelspiel</h2>
+    </div>
+    <div id="levels" class="levels"></div>
+    <button class="link" id="btnReset">Fortschritt zurücksetzen</button>
+  </section>
+
+  <!-- Level-Intro -->
+  <section id="intro" class="screen scroll" aria-label="Level-Start">
+    <div class="top">
+      <button class="icon" id="introBack" aria-label="Zurück zum Menü">&lsaquo;</button>
+      <h2 class="display" id="introTitle"></h2>
+    </div>
+    <div class="rules" id="introRules"></div>
+    <div class="how"><b>So geht's:</b> Ein Verb fällt nach unten. Tippe auf die passende Box oder zieh das Wort mit dem Finger hinein. Drei Fehler, und das Spiel ist vorbei.</div>
+    <div class="actions">
+      <button class="btn pink" id="introGo">Los geht's</button>
+    </div>
+  </section>
+
+  <!-- Spiel -->
+  <section id="game" class="screen" aria-label="Spiel">
+    <div class="hud">
+      <button class="icon" id="pauseBtn" aria-label="Pause">II</button>
+      <div class="hud-mid"><div class="score" id="score">0</div><div class="combo" id="combo"></div></div>
+      <div class="hearts" id="hearts" aria-label="Leben"></div>
+    </div>
+    <div class="prog"><i id="progFill"></i></div>
+    <div class="stage" id="stage">
+      <div class="field" id="field"></div>
+      <div class="bins" id="bins"></div>
+      <canvas id="fx"></canvas>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </div>
+    <div class="overlay" id="pauseOv">
+      <h3>Pause</h3>
+      <button class="btn" id="ovResume">Weiter</button>
+      <button class="btn ghost" id="ovRestart">Neu starten</button>
+      <button class="btn ghost" id="ovMenu">Zum Menü</button>
+    </div>
+  </section>
+
+  <!-- Ergebnis -->
+  <section id="result" class="screen scroll res" aria-label="Ergebnis">
+    <h2 class="display" id="resTitle"></h2>
+    <div class="stars" id="resStars"></div>
+    <p class="lead" id="resLead"></p>
+    <div class="stats" id="resStats"></div>
+    <div class="missed" id="resMissed"></div>
+    <div class="actions" id="resActions"></div>
+  </section>
+
+  <!-- Spickzettel -->
+  <section id="cheat" class="screen scroll" aria-label="Spickzettel">
+    <div class="top">
+      <button class="icon" id="cheatBack" aria-label="Zurück zum Menü">&lsaquo;</button>
+      <h2 class="display">Spickzettel</h2>
+    </div>
+    <p class="legend">Tippe auf ein Verb, um es dir vorlesen zu lassen. Ein roter Punkt markiert Verben, bei denen du dich vertan hast.</p>
+    <div id="cheatList"></div>
+  </section>
+
+  <!-- 1v1: Einstieg -->
+  <section id="vsEntry" class="screen scroll" aria-label="1 gegen 1">
+    <div class="top">
+      <button class="icon" id="vsBack" aria-label="Zurück zur Startseite">&lsaquo;</button>
+      <h2 class="display">1 gegen 1</h2>
+    </div>
+    <div class="how"><b>So geht's:</b> Ihr seht beide dieselben Verben und dieselben drei Muster. Jeder hat drei Leben. Wer zuerst keins mehr hat, verliert. Erstelle ein Spiel und schick deinem Gegner den Code.</div>
+    <button class="btn pink" id="btnCreate">Neues Spiel erstellen</button>
+    <div class="or"><span>oder Code eingeben</span></div>
+    <form id="joinForm" class="joinrow" autocomplete="off">
+      <input id="joinCode" maxlength="4" autocapitalize="characters" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="ABCD" aria-label="Spielcode">
+      <button class="btn aqua" type="submit">Beitreten</button>
+    </form>
+    <p class="err" id="vsErr" role="alert"></p>
+  </section>
+
+  <!-- 1v1: Warteraum -->
+  <section id="vsLobby" class="screen scroll" aria-label="Warteraum">
+    <div class="top">
+      <button class="icon" id="lobbyBack" aria-label="Spiel abbrechen">&lsaquo;</button>
+      <h2 class="display">Warte auf Gegner</h2>
+    </div>
+    <p class="lead2">Schick deinem Gegner diesen Code oder den Link. Sobald er drin ist, geht der Countdown los.</p>
+    <div class="code" id="lobbyCode" aria-live="polite"></div>
+    <div class="actions">
+      <button class="btn pink" id="btnShare">Link teilen</button>
+      <button class="btn ghost" id="btnCopy">Code kopieren</button>
+    </div>
+    <p class="wait" id="lobbyWait">Warte auf Gegner<span class="dots"></span></p>
+  </section>
+
+  <!-- 1v1: Spiel -->
+  <section id="vsGame" class="screen" aria-label="1 gegen 1 Spiel">
+    <div class="vhud">
+      <div class="who me"><span class="pn">Du</span><div class="hearts" id="vMe" aria-label="Deine Leben"></div></div>
+      <div class="vmid"><div class="vs-tag display">VS</div><div class="combo" id="vCombo"></div></div>
+      <div class="who opp"><span class="pn" id="vOppName">Gegner</span><div class="hearts" id="vOpp" aria-label="Leben des Gegners"></div></div>
+    </div>
+    <div class="conn" id="vConn" role="status">Verbindung wird wiederhergestellt …</div>
+    <div class="stage" id="vStage">
+      <div class="field" id="vField"></div>
+      <div class="bins" id="vBins"></div>
+      <canvas id="vFx" class="fx"></canvas>
+      <div class="toast" id="vToast" role="status" aria-live="polite"></div>
+    </div>
+    <div class="overlay cdov" id="vCount">
+      <h3>Gleich geht's los</h3>
+      <div class="cd display" id="vCd">3</div>
+      <div class="cd-rules" id="vRules"></div>
+    </div>
+  </section>
+
+  <!-- 1v1: Ergebnis -->
+  <section id="vsResult" class="screen scroll res" aria-label="Ergebnis">
+    <h2 class="display" id="vrTitle"></h2>
+    <p class="lead" id="vrLead"></p>
+    <div class="duel" id="vrDuel"></div>
+    <div class="missed" id="vrMissed"></div>
+    <div class="actions">
+      <button class="btn pink" id="btnRematch">Nochmal spielen</button>
+      <button class="btn ghost" id="btnVsEnd">Beenden</button>
+    </div>
+    <p class="wait" id="vrStatus"></p>
+  </section>
+
+</main>
+
+<script src="verbs.js"></script>
+<script src="app.js"></script>
+<script src="versus.js"></script>
+</body>
+</html>
