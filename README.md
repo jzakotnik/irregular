@@ -13,14 +13,14 @@ Irregular English verbs as a falling-words game for phones.
     npm start                 # http://127.0.0.1:3000  (PORT / HOST env vars)
     npm test                  # end-to-end test of the 1v1 protocol (takes ~40 s)
 
-## Deploy (pm2 + nginx)
+## Deploy (pm2)
 
     npm ci --omit=dev
     pm2 start ecosystem.config.js
     pm2 save && pm2 startup
 
-Use `deploy/nginx.conf` for `https://irregular.derjure.de`. It forwards `/ws` with the WebSocket upgrade
-headers. Run **exactly one** instance: rooms live only in the memory of the Node process, so a restart
+Behind a reverse proxy, forward `/ws` with the WebSocket upgrade headers (`Upgrade`/`Connection`) and a long
+`proxy_read_timeout`; the server pings every 25 s. Run **exactly one** instance: rooms live only in the memory of the Node process, so a restart
 ends running games (players see "Das Spiel gibt es nicht mehr").
 
 ## How 1v1 works
