@@ -1,0 +1,13 @@
+{
+  "name": "irregular",
+  "version": "1.0.0",
+  "description": "Verb Drop: irregular English verbs, single player and 1v1 battle",
+  "main": "server.js",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test/e2e.js"
+  },
+  "engines": { "node": ">=18" },
+  "dependencies": { "ws": "^8.18.0" }
+}
